@@ -567,6 +567,199 @@
         .section-title:first-child {
             margin-top: 0;
         }
+
+        /* ---------- DEMO INTERACTIVE STYLES ---------- */
+        .btn-action-new {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-action-new:hover {
+            background: #B6692B;
+            transform: translateY(-1px);
+        }
+
+        .toolbar-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            width: 310px;
+            height: 38px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 0 14px;
+            font-size: 13.5px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-sm-primary {
+            background: var(--bg-dark);
+            color: white;
+        }
+
+        .btn-sm-primary:hover {
+            background: #122029;
+        }
+
+        .btn-sm-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-sm-success:hover {
+            background: #33784F;
+        }
+
+        .btn-sm-outline {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(27, 42, 51, 0.65);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border-radius: 14px;
+            width: 440px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            border: 1px solid var(--border);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 20000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            border-left: 4px solid var(--success);
+            padding: 14px 18px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-dark);
+            animation: slideIn 0.25s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Chat input */
+        .chat-input-bar {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 13.5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-send-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 18px;
+            font-weight: 600;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chat-send-btn:hover {
+            background: #1ebc59;
+        }
     </style>
 </head>
 
@@ -624,8 +817,11 @@
                     <h1 id="view-title">Panel general</h1>
                     <p id="view-sub">Vista operativa de la empresa · actualizado hoy</p>
                 </div>
-                <div class="user-pill">
-                    <div class="avatar">AD</div> Administrador
+                <div style="display:flex; align-items:center; gap:14px;">
+                    <button class="btn-action-new" onclick="openNewContModal()">+ Nuevo Alquiler</button>
+                    <div class="user-pill">
+                        <div class="avatar">AD</div> Administrador
+                    </div>
                 </div>
             </div>
 
@@ -704,12 +900,17 @@
 
             <!-- ---- CONTENEDORES ---- -->
             <div class="view" id="view-contenedores">
-                <div class="filters" id="cont-filters">
-                    <button class="active" data-f="todos">Todos</button>
-                    <button data-f="Disponible">Disponible</button>
-                    <button data-f="Alquilado">Alquilado</button>
-                    <button data-f="Para retirar">Para retirar</button>
-                    <button data-f="Vencido">Vencido</button>
+                <div class="toolbar-row">
+                    <div class="filters" id="cont-filters">
+                        <button class="active" data-f="todos">Todos</button>
+                        <button data-f="Disponible">Disponible</button>
+                        <button data-f="Alquilado">Alquilado</button>
+                        <button data-f="Para retirar">Para retirar</button>
+                        <button data-f="Vencido">Vencido</button>
+                    </div>
+                    <div>
+                        <input type="text" id="cont-search" class="search-input" placeholder="Buscar por código, cliente o ubicación..." oninput="handleContSearch(this.value)">
+                    </div>
                 </div>
                 <div class="card">
                     <table id="cont-table">
@@ -719,6 +920,7 @@
                             <th>Ubicación</th>
                             <th>Estado</th>
                             <th>Últ. movimiento</th>
+                            <th>Acción</th>
                         </tr>
                     </table>
                 </div>
@@ -729,20 +931,23 @@
                 <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
                     <div class="kpi-card">
                         <p class="label">Cobrado este mes</p>
-                        <p class="value">USD 4.860</p>
+                        <p class="value" id="kpi-cobrado-val">USD 4.860</p>
                         <p class="delta up">+12%</p>
                     </div>
                     <div class="kpi-card">
                         <p class="label">Pendiente</p>
-                        <p class="value">USD 2.140</p>
+                        <p class="value" id="kpi-pendiente-val">USD 2.140</p>
                     </div>
                     <div class="kpi-card">
                         <p class="label">Vencido</p>
-                        <p class="value" style="color:var(--danger);">USD 610</p>
+                        <p class="value" id="kpi-vencido-val" style="color:var(--danger);">USD 610</p>
                     </div>
                 </div>
+                <div class="toolbar-row">
+                    <h3 style="font-size:15px; font-weight:600;">Estado de cobranzas</h3>
+                    <input type="text" id="cobros-search" class="search-input" placeholder="Buscar cliente o contenedor..." oninput="handleCobrosSearch(this.value)">
+                </div>
                 <div class="card">
-                    <h3>Estado de cobranzas</h3>
                     <table id="cobros-table">
                         <tr>
                             <th>Cliente</th>
@@ -750,6 +955,7 @@
                             <th>Monto</th>
                             <th>Vencimiento</th>
                             <th>Estado</th>
+                            <th>Acción</th>
                         </tr>
                     </table>
                 </div>
@@ -800,9 +1006,18 @@
             <!-- ---- CHATBOT ---- -->
             <div class="view" id="view-chatbot">
                 <div class="grid-2">
-                    <div class="card">
-                        <h3>Conversación simulada</h3>
-                        <div id="chat-thread" style="display:flex; flex-direction:column; gap:8px;"></div>
+                    <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; min-height:420px;">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <h3>Conversación en vivo (Simulador)</h3>
+                                <span class="badge ok">Bot Activo 24/7</span>
+                            </div>
+                            <div id="chat-thread" style="display:flex; flex-direction:column; gap:8px; max-height:290px; overflow-y:auto; padding-right:6px;"></div>
+                        </div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="chat-input-msg" class="chat-input" placeholder="Escribí como cliente (ej: 'Retirar JB-0212', '¿Cuánto debo?')..." autocomplete="off" onkeydown="if(event.key==='Enter') sendChatbotMsg()">
+                            <button class="chat-send-btn" onclick="sendChatbotMsg()">Enviar</button>
+                        </div>
                     </div>
                     <div class="card">
                         <h3>Resumen del bot</h3>
@@ -813,11 +1028,11 @@
                             </tr>
                             <tr>
                                 <td>Conversaciones hoy</td>
-                                <td class="mono">17</td>
+                                <td class="mono" id="bot-stat-conversations">17</td>
                             </tr>
                             <tr>
                                 <td>Resueltas sin operador</td>
-                                <td class="mono">11</td>
+                                <td class="mono" id="bot-stat-auto">11</td>
                             </tr>
                             <tr>
                                 <td>Derivadas a operador</td>
@@ -834,6 +1049,55 @@
 
         </div>
     </div>
+
+    <!-- ================= MODAL NUEVO CONTENEDOR ================= -->
+    <div class="modal-overlay" id="modal-new-cont">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Nuevo Alquiler de Contenedor</h2>
+                <button class="modal-close" onclick="closeNewContModal()">×</button>
+            </div>
+            <div class="field">
+                <label>Código del Contenedor</label>
+                <input id="modal-code" type="text" placeholder="Ej: JB-0288">
+            </div>
+            <div class="field">
+                <label>Cliente / Obra</label>
+                <input id="modal-client" type="text" placeholder="Ej: Constructora Mendoza">
+            </div>
+            <div class="field">
+                <label>Ubicación / Dirección</label>
+                <input id="modal-location" type="text" placeholder="Ej: Acceso Sur km 14">
+            </div>
+            <div class="field">
+                <label>Estado Inicial</label>
+                <select id="modal-status" class="search-input" style="width:100%; height:42px;">
+                    <option value="Alquilado">Alquilado</option>
+                    <option value="Disponible">Disponible</option>
+                    <option value="Para retirar">Para retirar</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Precio del Alquiler (USD)</label>
+                <input id="modal-price" type="number" placeholder="Ej: 420" value="420" class="search-input" style="width:100%;">
+            </div>
+            <div class="field">
+                <label>Estado del Cobro</label>
+                <select id="modal-pago-status" class="search-input" style="width:100%; height:42px;">
+                    <option value="al día">Al día (Ya Pagado ✓)</option>
+                    <option value="por vencer">Pendiente de Pago</option>
+                    <option value="vencido">Vencido / Atrasado</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:1.5rem;">
+                <button class="btn-primary" style="margin-top:0;" onclick="saveNewContenedor()">Guardar Contenedor</button>
+                <button class="btn-sm btn-sm-outline" style="width:120px; height:44px;" onclick="closeNewContModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TOAST CONTAINER ================= -->
+    <div class="toast-container" id="toast-container"></div>
 
     <script>
         // ---------- LOGIN ----------
@@ -877,7 +1141,7 @@
         }
 
         // ---------- DATA ----------
-        const contenedores = [
+        let contenedores = [
             ['JB-0231', 'Obra Chacras', 'Ruta 60 km 5', 'Para retirar', 'Hoy 09:41'],
             ['JB-0198', 'Constructora Sur', 'Depósito Norte', 'Vencido', 'Ayer 18:20'],
             ['JB-0212', 'Depósito Este', 'Planta Este', 'Alquilado', 'Hoy 08:52'],
@@ -889,6 +1153,9 @@
             ['JB-0261', 'Depósito Este', 'Playa 1', 'Para retirar', 'Hoy 07:58'],
         ];
 
+        let currentContFilter = 'todos';
+        let currentContSearch = '';
+
         const estadoBadge = e => {
             if (e === 'Disponible') return '<span class="badge ok">Disponible</span>';
             if (e === 'Alquilado') return '<span class="badge neutral">Alquilado</span>';
@@ -896,23 +1163,62 @@
             return '<span class="badge danger">Vencido</span>';
         };
 
-        function renderContenedores(filter) {
+        function getActionButton(c, idx) {
+            const estado = c[3];
+            if (estado === 'Alquilado') {
+                return `<button class="btn-sm btn-sm-primary" onclick="cambiarEstadoCont(${idx}, 'Para retirar')">Pedir retiro</button>`;
+            }
+            if (estado === 'Para retirar' || estado === 'Vencido') {
+                return `<button class="btn-sm btn-sm-success" onclick="cambiarEstadoCont(${idx}, 'Disponible')">Marcar recibido</button>`;
+            }
+            return `<button class="btn-sm btn-sm-outline" onclick="cambiarEstadoCont(${idx}, 'Alquilado')">Alquilar</button>`;
+        }
+
+        function cambiarEstadoCont(idx, nuevoEstado) {
+            const codigo = contenedores[idx][0];
+            contenedores[idx][3] = nuevoEstado;
+            contenedores[idx][4] = 'Recién';
+            renderContenedores();
+            updateKPIs();
+            showToast(`Estado de ${codigo} actualizado a: ${nuevoEstado}`);
+        }
+
+        function handleContSearch(val) {
+            currentContSearch = val.toLowerCase().trim();
+            renderContenedores();
+        }
+
+        function renderContenedores() {
             const table = document.getElementById('cont-table');
-            table.innerHTML = '<tr><th>Contenedor</th><th>Cliente</th><th>Ubicación</th><th>Estado</th><th>Últ. movimiento</th></tr>';
-            contenedores.filter(c => filter === 'todos' || c[3] === filter).forEach(c => {
-                table.innerHTML += `<tr><td class="mono">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${estadoBadge(c[3])}</td><td>${c[4]}</td></tr>`;
+            table.innerHTML = '<tr><th>Contenedor</th><th>Cliente</th><th>Ubicación</th><th>Estado</th><th>Últ. movimiento</th><th>Acción</th></tr>';
+            contenedores.forEach((c, idx) => {
+                const matchFilter = currentContFilter === 'todos' || c[3] === currentContFilter;
+                const matchSearch = !currentContSearch || c[0].toLowerCase().includes(currentContSearch) || c[1].toLowerCase().includes(currentContSearch) || c[2].toLowerCase().includes(currentContSearch);
+                if (matchFilter && matchSearch) {
+                    table.innerHTML += `<tr>
+                        <td class="mono">${c[0]}</td>
+                        <td>${c[1]}</td>
+                        <td>${c[2]}</td>
+                        <td>${estadoBadge(c[3])}</td>
+                        <td>${c[4]}</td>
+                        <td>${getActionButton(c, idx)}</td>
+                    </tr>`;
+                }
             });
         }
-        renderContenedores('todos');
+        renderContenedores();
+
         document.querySelectorAll('#cont-filters button').forEach(b => {
             b.addEventListener('click', () => {
                 document.querySelectorAll('#cont-filters button').forEach(x => x.classList.remove('active'));
                 b.classList.add('active');
-                renderContenedores(b.dataset.f);
+                currentContFilter = b.dataset.f;
+                renderContenedores();
             });
         });
 
-        const cobros = [
+        // ---------- COBROS ----------
+        let cobros = [
             ['Obra Chacras', 'JB-0231', 'USD 420', '15 jul 2026', 'al día', 'ok'],
             ['Constructora Sur', 'JB-0198', 'USD 610', '28 jun 2026', 'vencido', 'danger'],
             ['Depósito Este', 'JB-0212', 'USD 380', '12 jul 2026', 'por vencer', 'warn'],
@@ -920,20 +1226,59 @@
             ['Obra Guaymallén', 'JB-0244', 'USD 400', '20 jul 2026', 'al día', 'ok'],
             ['Cliente Maipú', 'JB-0176', 'USD 300', '05 jul 2026', 'por vencer', 'warn'],
         ];
-        const cobrosTable = document.getElementById('cobros-table');
-        cobros.forEach(c => {
-            const label = c[4].charAt(0).toUpperCase() + c[4].slice(1);
-            cobrosTable.innerHTML += `<tr><td>${c[0]}</td><td class="mono">${c[1]}</td><td class="mono">${c[2]}</td><td>${c[3]}</td><td><span class="badge ${c[5]}">${label}</span></td></tr>`;
-        });
 
-        const alertas = [
+        let currentCobrosSearch = '';
+
+        function handleCobrosSearch(val) {
+            currentCobrosSearch = val.toLowerCase().trim();
+            renderCobros();
+        }
+
+        function registrarCobro(idx) {
+            const c = cobros[idx];
+            c[4] = 'al día';
+            c[5] = 'ok';
+            renderCobros();
+            updateKPIs();
+            showToast(`Pago registrado con éxito para ${c[0]} (${c[1]})`);
+        }
+
+        function renderCobros() {
+            const cobrosTable = document.getElementById('cobros-table');
+            cobrosTable.innerHTML = '<tr><th>Cliente</th><th>Contenedor</th><th>Monto</th><th>Vencimiento</th><th>Estado</th><th>Acción</th></tr>';
+            cobros.forEach((c, idx) => {
+                const match = !currentCobrosSearch || c[0].toLowerCase().includes(currentCobrosSearch) || c[1].toLowerCase().includes(currentCobrosSearch);
+                if (match) {
+                    const label = c[4].charAt(0).toUpperCase() + c[4].slice(1);
+                    let actionBtn = `<span style="color:var(--success); font-weight:600; font-size:12px;">✓ Pagado</span>`;
+                    if (c[5] !== 'ok') {
+                        actionBtn = `<button class="btn-sm btn-sm-success" onclick="registrarCobro(${idx})">Registrar Pago</button>`;
+                    }
+                    cobrosTable.innerHTML += `<tr>
+                        <td>${c[0]}</td>
+                        <td class="mono">${c[1]}</td>
+                        <td class="mono">${c[2]}</td>
+                        <td>${c[3]}</td>
+                        <td><span class="badge ${c[5]}">${label}</span></td>
+                        <td>${actionBtn}</td>
+                    </tr>`;
+                }
+            });
+        }
+        renderCobros();
+        updateKPIs();
+
+        // ---------- ALERTAS ----------
+        let alertas = [
             ['warn', '⏱', 'JB-0261 · retiro solicitado', 'Recién ingresado por el chatbot de WhatsApp', 'hace 5 min'],
             ['danger', '!', 'JB-0198 · alquiler vencido', 'Sin pago registrado desde el 28 de junio', 'hace 2 h'],
             ['warn', '⏱', 'JB-0212 · vence en 2 días', 'Recordatorio automático enviado al cliente', 'hace 3 h'],
             ['ok', '✓', 'JB-0187 · pago recibido', 'Registrado por el operador', 'ayer'],
         ];
+
         function renderAlertas(target) {
             const el = document.getElementById(target);
+            if (!el) return;
             el.innerHTML = '';
             alertas.forEach(a => {
                 el.innerHTML += `<div class="alert-row">
@@ -946,12 +1291,97 @@
         renderAlertas('dash-alerts');
         renderAlertas('alertas-full');
 
+        // ---------- UPDATE KPIS ----------
+        function updateKPIs() {
+            const activos = contenedores.filter(c => c[3] === 'Alquilado' || c[3] === 'Para retirar').length;
+            const disponibles = contenedores.filter(c => c[3] === 'Disponible').length;
+            const cardActivos = document.querySelectorAll('.kpi-card .value')[0];
+            const cardDisponibles = document.querySelectorAll('.kpi-card .value')[1];
+            if (cardActivos) cardActivos.textContent = activos;
+            if (cardDisponibles) cardDisponibles.textContent = disponibles;
+
+            // Cobros KPIs
+            let totalCobrado = 0;
+            let totalPendiente = 0;
+            let totalVencido = 0;
+            cobros.forEach(c => {
+                const num = parseInt(String(c[2]).replace(/[^\d]/g, '')) || 0;
+                if (c[4] === 'al día') {
+                    totalCobrado += num;
+                } else if (c[4] === 'vencido') {
+                    totalVencido += num;
+                    totalPendiente += num;
+                } else {
+                    totalPendiente += num;
+                }
+            });
+            const elCobrado = document.getElementById('kpi-cobrado-val');
+            const elPendiente = document.getElementById('kpi-pendiente-val');
+            const elVencido = document.getElementById('kpi-vencido-val');
+            if (elCobrado) elCobrado.textContent = 'USD ' + totalCobrado.toLocaleString('es-AR');
+            if (elPendiente) elPendiente.textContent = 'USD ' + totalPendiente.toLocaleString('es-AR');
+            if (elVencido) elVencido.textContent = 'USD ' + totalVencido.toLocaleString('es-AR');
+        }
+
+        // ---------- MODAL & TOAST ----------
+        function openNewContModal() {
+            document.getElementById('modal-new-cont').style.display = 'flex';
+            document.getElementById('modal-code').focus();
+        }
+
+        function closeNewContModal() {
+            document.getElementById('modal-new-cont').style.display = 'none';
+        }
+
+        function saveNewContenedor() {
+            const code = document.getElementById('modal-code').value.trim() || 'JB-' + Math.floor(100 + Math.random()*899);
+            const client = document.getElementById('modal-client').value.trim() || 'Cliente Nuevo';
+            const loc = document.getElementById('modal-location').value.trim() || 'Obra Central';
+            const status = document.getElementById('modal-status').value;
+            const price = document.getElementById('modal-price').value.trim() || '420';
+            const pagoStatus = document.getElementById('modal-pago-status').value;
+
+            let badgeType = 'ok';
+            if (pagoStatus === 'por vencer') badgeType = 'warn';
+            if (pagoStatus === 'vencido') badgeType = 'danger';
+
+            contenedores.unshift([code, client, loc, status, 'Recién']);
+            cobros.unshift([client, code, 'USD ' + price, 'Hoy', pagoStatus, badgeType]);
+
+            renderContenedores();
+            renderCobros();
+            updateKPIs();
+            closeNewContModal();
+
+            // Clear inputs
+            document.getElementById('modal-code').value = '';
+            document.getElementById('modal-client').value = '';
+            document.getElementById('modal-location').value = '';
+
+            showToast(`¡Contenedor ${code} y cobro por USD ${price} registrados!`);
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>✓</span><span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // ---------- GRÁFICOS ----------
         const meses12 = [
             ['Ago', '3120'], ['Sep', '3480'], ['Oct', '4010'], ['Nov', '5240'], ['Dic', '3900'], ['Ene', '2980'],
             ['Feb', '3350'], ['Mar', '3720'], ['Abr', '3990'], ['May', '4210'], ['Jun', '4570'], ['Jul', '4860']
         ];
         function renderChart(target, data) {
             const el = document.getElementById(target);
+            if (!el) return;
             const max = Math.max(...data.map(d => parseInt(d[1])));
             el.innerHTML = '';
             data.forEach(d => {
@@ -966,6 +1396,7 @@
         renderChart('mini-chart', meses12.slice(-6));
         renderChart('full-chart', meses12);
 
+        // ---------- CHATBOT INTERACTIVO ----------
         const chatMsgs = [
             ['in', 'Hola, necesito retirar un contenedor de la obra en Chacras'],
             ['out', 'Perfecto. ¿Me pasás el número de contenedor o la dirección de retiro?'],
@@ -975,10 +1406,53 @@
             ['out', 'Tenés USD 420 pendientes con vencimiento el 15 de julio. ¿Querés que te pase el alias para transferir?']
         ];
         const thread = document.getElementById('chat-thread');
-        chatMsgs.forEach(m => {
-            const isOut = m[0] === 'out';
-            thread.innerHTML += `<div style="align-self:${isOut ? 'flex-start' : 'flex-end'}; max-width:85%; font-size:13.5px; padding:8px 12px; border-radius:${isOut ? '12px 12px 12px 2px' : '12px 12px 2px 12px'}; background:${isOut ? '#F1EFE8' : 'var(--accent-light)'}; color:${isOut ? 'var(--text-dark)' : '#8A4A1F'};">${m[1]}</div>`;
-        });
+
+        function renderChatThread() {
+            thread.innerHTML = '';
+            chatMsgs.forEach(m => {
+                const isOut = m[0] === 'out';
+                thread.innerHTML += `<div style="align-self:${isOut ? 'flex-start' : 'flex-end'}; max-width:85%; font-size:13.5px; padding:8px 12px; border-radius:${isOut ? '12px 12px 12px 2px' : '12px 12px 2px 12px'}; background:${isOut ? '#F1EFE8' : 'var(--accent-light)'}; color:${isOut ? 'var(--text-dark)' : '#8A4A1F'}; line-height:1.4;">${m[1]}</div>`;
+            });
+            thread.scrollTop = thread.scrollHeight;
+        }
+        renderChatThread();
+
+        let totalBotConversations = 17;
+        let totalBotAuto = 11;
+
+        function sendChatbotMsg() {
+            const input = document.getElementById('chat-input-msg');
+            const text = input.value.trim();
+            if (!text) return;
+            chatMsgs.push(['in', text]);
+            input.value = '';
+            renderChatThread();
+
+            // Smart auto reply
+            setTimeout(() => {
+                const t = text.toLowerCase();
+                let reply = 'Hola, soy el asistente virtual de Jabalia. ¿En qué te puedo ayudar? Podés consultarme por retiros, saldos pendientes o nuevos alquileres.';
+                if (t.includes('retir') || t.includes('jb-')) {
+                    reply = '¡Retiro programado con éxito! Hemos notificado al área de logística para coordinar el camión. Recibirás confirmación del chofer en breve.';
+                    alertas.unshift(['warn', '⏱', 'Retiro solicitado por WhatsApp', `Mensaje recibido: "${text}"`, 'Recién']);
+                    renderAlertas('dash-alerts');
+                    renderAlertas('alertas-full');
+                } else if (t.includes('pago') || t.includes('deuda') || t.includes('debo') || t.includes('saldo') || t.includes('precio')) {
+                    reply = 'Tu saldo pendiente registrado en el sistema es de USD 420. Podés abonar mediante transferencia al alias JABALIA.LOGISTICA.';
+                } else if (t.includes('hola') || t.includes('buenas')) {
+                    reply = '¡Hola! Bienvenido al canal automatizado de Jabalia. Indicanos tu consulta o número de contenedor JB-XXXX.';
+                }
+                chatMsgs.push(['out', reply]);
+                renderChatThread();
+
+                totalBotConversations++;
+                totalBotAuto++;
+                document.getElementById('bot-stat-conversations').textContent = totalBotConversations;
+                document.getElementById('bot-stat-auto').textContent = totalBotAuto;
+
+                showToast('Nuevo mensaje del bot procesado automáticamente');
+            }, 500);
+        }
     </script>
 </body>
 

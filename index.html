@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jabalia · Panel de Gestión</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1B2A33;
+            --bg-dark-2: #233742;
+            --bg-page: #F6F4EF;
+            --bg-card: #FFFFFF;
+            --accent: #C97A3A;
+            --accent-light: #F3E3D4;
+            --text-dark: #1B2A33;
+            --text-muted: #6B7280;
+            --text-soft: #9AA5AB;
+            --success: #3F8F5F;
+            --success-bg: #E6F2EA;
+            --danger: #C1443C;
+            --danger-bg: #FBEAE8;
+            --warning: #B8862E;
+            --warning-bg: #FBF1DE;
+            --border: #E7E3DA;
+            --radius: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3,
+        .display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* ---------- LOGIN ---------- */
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(180deg, rgba(27, 42, 51, 0.94), rgba(27, 42, 51, 0.94)),
+                repeating-linear-gradient(135deg, #2b3e48 0px, #2b3e48 2px, #233742 2px, #233742 40px);
+        }
+
+        .login-card {
+            width: 380px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem 2.25rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .login-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1.25rem;
+        }
+
+        .login-card h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .login-card p.sub {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 1.75rem;
+        }
+
+        .field {
+            margin-bottom: 1rem;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .field input {
+            width: 100%;
+            height: 42px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 0 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: #FBFAF8;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+        }
+
+        .btn-primary {
+            width: 100%;
+            height: 44px;
+            border-radius: 8px;
+            border: none;
+            background: var(--bg-dark);
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: .5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background: #122029;
+        }
+
+        .login-hint {
+            margin-top: 1.25rem;
+            font-size: 12px;
+            color: var(--text-soft);
+            background: #FAF7F2;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: -4px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        /* ---------- APP SHELL ---------- */
+        #app {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            background: var(--bg-dark);
+            color: #D7DEE1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+            padding: 0 .25rem;
+        }
+
+        .brand .mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 14px;
+        }
+
+        .brand span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #B7C1C6;
+            transition: background .12s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-dark-2);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-item .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: .7;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            font-size: 12px;
+            color: var(--text-soft);
+            padding: .5rem .25rem;
+            border-top: 1px solid #2C3E48;
+            padding-top: 1rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #B7C1C6;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 8px;
+            padding: 0;
+        }
+
+        .logout-btn:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .main {
+            margin-left: 230px;
+            flex: 1;
+            padding: 2rem 2.5rem;
+            width: calc(100% - 230px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.75rem;
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .topbar p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 12px 6px 6px;
+            font-size: 13px;
+        }
+
+        .user-pill .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 1.75rem;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.1rem 1.25rem;
+        }
+
+        .kpi-card p.label {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .kpi-card p.value {
+            font-size: 26px;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .kpi-card p.delta {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .delta.up {
+            color: var(--success);
+        }
+
+        .delta.down {
+            color: var(--danger);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 16px;
+            margin-bottom: 1.75rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* revenue bars */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 160px;
+            padding-top: 10px;
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar {
+            width: 100%;
+            background: var(--accent);
+            border-radius: 4px 4px 0 0;
+            opacity: .85;
+        }
+
+        .bar-col:hover .bar {
+            opacity: 1;
+        }
+
+        .bar-col .m-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .bar-col .m-value {
+            font-size: 10.5px;
+            color: var(--text-soft);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 12.5px;
+            padding: 8px 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 10px 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .badge.ok {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .badge.warn {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .badge.danger {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .badge.neutral {
+            background: #EEECE6;
+            color: var(--text-muted);
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .filters button {
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filters button.active {
+            background: var(--bg-dark);
+            color: white;
+            border-color: var(--bg-dark);
+        }
+
+        .alert-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .alert-row:last-child {
+            border-bottom: none;
+        }
+
+        .alert-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.warn {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .alert-icon.danger {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .alert-icon.ok {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .alert-text p.t {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .alert-text p.s {
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        .alert-time {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--text-soft);
+            white-space: nowrap;
+        }
+
+        .section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--text-muted);
+            margin: 1.75rem 0 .75rem;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= LOGIN ================= -->
+    <div id="login-screen">
+        <div class="login-card">
+            <div class="login-mark">J</div>
+            <h1>Panel de Gestión</h1>
+            <p class="sub">Jabalia · Sistema de gestión logística</p>
+            <div class="field">
+                <label for="user">Usuario</label>
+                <input id="user" type="text" placeholder="admin" autocomplete="off">
+            </div>
+            <div class="field">
+                <label for="pass">Contraseña</label>
+                <input id="pass" type="password" placeholder="••••••••">
+            </div>
+            <p class="login-error" id="login-error">Usuario o contraseña incorrectos.</p>
+            <button class="btn-primary" onclick="tryLogin()">Ingresar</button>
+            <div class="login-hint">Demo: usuario <b>admin</b> · contraseña <b>jabalia2026</b></div>
+        </div>
+    </div>
+
+    <!-- ================= APP ================= -->
+    <div id="app">
+        <div class="sidebar">
+            <div class="brand">
+                <div class="mark">J</div><span>Jabalia</span>
+            </div>
+            <nav>
+                <div class="nav-item active" data-view="dashboard" onclick="showView('dashboard', this)"><span
+                        class="dot"></span> Panel general</div>
+                <div class="nav-item" data-view="contenedores" onclick="showView('contenedores', this)"><span
+                        class="dot"></span> Contenedores</div>
+                <div class="nav-item" data-view="cobros" onclick="showView('cobros', this)"><span class="dot"></span>
+                    Cobros</div>
+                <div class="nav-item" data-view="ingresos" onclick="showView('ingresos', this)"><span
+                        class="dot"></span> Ingresos</div>
+                <div class="nav-item" data-view="alertas" onclick="showView('alertas', this)"><span class="dot"></span>
+                    Alertas</div>
+                <div class="nav-item" data-view="chatbot" onclick="showView('chatbot', this)"><span class="dot"></span>
+                    Chatbot WhatsApp</div>
+            </nav>
+            <div class="sidebar-footer">
+                Conectado como<br><b style="color:white;">Administrador</b>
+                <br><button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div>
+                    <h1 id="view-title">Panel general</h1>
+                    <p id="view-sub">Vista operativa de la empresa · actualizado hoy</p>
+                </div>
+                <div class="user-pill">
+                    <div class="avatar">AD</div> Administrador
+                </div>
+            </div>
+
+            <!-- ---- DASHBOARD ---- -->
+            <div class="view active" id="view-dashboard">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <p class="label">Contenedores activos</p>
+                        <p class="value">38</p>
+                        <p class="delta up">+3 esta semana</p>
+                    </div>
+                    <div class="kpi-card">
+                        <p class="label">Disponibles</p>
+                        <p class="value">12</p>
+                        <p class="delta down">-2 vs. semana pasada</p>
+                    </div>
+                    <div class="kpi-card">
+                        <p class="label">Viajes programados hoy</p>
+                        <p class="value">6</p>
+                        <p class="delta up">+1</p>
+                    </div>
+                    <div class="kpi-card">
+                        <p class="label">Cobros pendientes</p>
+                        <p class="value">USD 2.140</p>
+                        <p class="delta down">3 vencidos</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Ingresos últimos 6 meses</h3>
+                        <div class="bar-chart" id="mini-chart"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Alertas activas</h3>
+                        <div id="dash-alerts"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Actividad reciente</h3>
+                    <table>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Evento</th>
+                            <th>Contenedor</th>
+                            <th>Origen</th>
+                        </tr>
+                        <tr>
+                            <td class="mono">09:41</td>
+                            <td>Solicitud de retiro vía WhatsApp</td>
+                            <td class="mono">JB-0231</td>
+                            <td><span class="badge neutral">Chatbot</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">09:15</td>
+                            <td>Pago registrado</td>
+                            <td class="mono">JB-0187</td>
+                            <td><span class="badge ok">Operador</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">08:52</td>
+                            <td>Alerta de vencimiento generada</td>
+                            <td class="mono">JB-0198</td>
+                            <td><span class="badge neutral">Sistema</span></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">08:30</td>
+                            <td>Nuevo contenedor alquilado</td>
+                            <td class="mono">JB-0244</td>
+                            <td><span class="badge ok">Operador</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ---- CONTENEDORES ---- -->
+            <div class="view" id="view-contenedores">
+                <div class="filters" id="cont-filters">
+                    <button class="active" data-f="todos">Todos</button>
+                    <button data-f="Disponible">Disponible</button>
+                    <button data-f="Alquilado">Alquilado</button>
+                    <button data-f="Para retirar">Para retirar</button>
+                    <button data-f="Vencido">Vencido</button>
+                </div>
+                <div class="card">
+                    <table id="cont-table">
+                        <tr>
+                            <th>Contenedor</th>
+                            <th>Cliente</th>
+                            <th>Ubicación</th>
+                            <th>Estado</th>
+                            <th>Últ. movimiento</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ---- COBROS ---- -->
+            <div class="view" id="view-cobros">
+                <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+                    <div class="kpi-card">
+                        <p class="label">Cobrado este mes</p>
+                        <p class="value">USD 4.860</p>
+                        <p class="delta up">+12%</p>
+                    </div>
+                    <div class="kpi-card">
+                        <p class="label">Pendiente</p>
+                        <p class="value">USD 2.140</p>
+                    </div>
+                    <div class="kpi-card">
+                        <p class="label">Vencido</p>
+                        <p class="value" style="color:var(--danger);">USD 610</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Estado de cobranzas</h3>
+                    <table id="cobros-table">
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Contenedor</th>
+                            <th>Monto</th>
+                            <th>Vencimiento</th>
+                            <th>Estado</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ---- INGRESOS ---- -->
+            <div class="view" id="view-ingresos">
+                <div class="card" style="margin-bottom:1.5rem;">
+                    <h3>Ingresos mensuales (últimos 12 meses)</h3>
+                    <div class="bar-chart" id="full-chart" style="height:220px;"></div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Resumen anual</h3>
+                        <table>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Monto</th>
+                            </tr>
+                            <tr>
+                                <td>Total facturado</td>
+                                <td class="mono">USD 46.320</td>
+                            </tr>
+                            <tr>
+                                <td>Total cobrado</td>
+                                <td class="mono">USD 43.910</td>
+                            </tr>
+                            <tr>
+                                <td>Pendiente de cobro</td>
+                                <td class="mono">USD 2.410</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3>Mejor mes</h3>
+                        <p class="value display" style="font-size:26px;">Noviembre</p>
+                        <p style="color:var(--text-muted); font-size:13px; margin-top:6px;">USD 5.240 facturados · 14
+                            contenedores alquilados</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ---- ALERTAS ---- -->
+            <div class="view" id="view-alertas">
+                <div class="card" id="alertas-full"></div>
+            </div>
+
+            <!-- ---- CHATBOT ---- -->
+            <div class="view" id="view-chatbot">
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Conversación simulada</h3>
+                        <div id="chat-thread" style="display:flex; flex-direction:column; gap:8px;"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Resumen del bot</h3>
+                        <table>
+                            <tr>
+                                <th>Métrica</th>
+                                <th>Valor</th>
+                            </tr>
+                            <tr>
+                                <td>Conversaciones hoy</td>
+                                <td class="mono">17</td>
+                            </tr>
+                            <tr>
+                                <td>Resueltas sin operador</td>
+                                <td class="mono">11</td>
+                            </tr>
+                            <tr>
+                                <td>Derivadas a operador</td>
+                                <td class="mono">6</td>
+                            </tr>
+                            <tr>
+                                <td>Tiempo prom. de respuesta</td>
+                                <td class="mono">2 seg</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ---------- LOGIN ----------
+        function tryLogin() {
+            const u = document.getElementById('user').value.trim();
+            const p = document.getElementById('pass').value.trim();
+            const err = document.getElementById('login-error');
+            if (u === 'admin' && p === 'jabalia2026') {
+                err.style.display = 'none';
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'flex';
+            } else {
+                err.style.display = 'block';
+            }
+        }
+        document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+        function logout() {
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('user').value = '';
+            document.getElementById('pass').value = '';
+        }
+
+        // ---------- NAV ----------
+        const titles = {
+            dashboard: ['Panel general', 'Vista operativa de la empresa · actualizado hoy'],
+            contenedores: ['Contenedores', 'Seguimiento de estado por unidad'],
+            cobros: ['Cobros', 'Control de cobranzas y facturación'],
+            ingresos: ['Ingresos', 'Evolución mensual del facturado'],
+            alertas: ['Alertas', 'Vencimientos y notificaciones automáticas'],
+            chatbot: ['Chatbot WhatsApp', 'Actividad del asistente automático']
+        };
+        function showView(name, el) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + name).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('view-title').textContent = titles[name][0];
+            document.getElementById('view-sub').textContent = titles[name][1];
+        }
+
+        // ---------- DATA ----------
+        const contenedores = [
+            ['JB-0231', 'Obra Chacras', 'Ruta 60 km 5', 'Para retirar', 'Hoy 09:41'],
+            ['JB-0198', 'Constructora Sur', 'Depósito Norte', 'Vencido', 'Ayer 18:20'],
+            ['JB-0212', 'Depósito Este', 'Planta Este', 'Alquilado', 'Hoy 08:52'],
+            ['JB-0187', 'Edificio Palmares', 'Retirado', 'Disponible', 'Hoy 09:15'],
+            ['JB-0244', 'Obra Guaymallén', 'Playa 3', 'Alquilado', 'Hoy 08:30'],
+            ['JB-0176', 'Cliente Maipú', 'Playa 1', 'Disponible', 'Ayer 15:10'],
+            ['JB-0203', 'Constructora Sur', 'Ruta 40 km 12', 'Alquilado', 'Hace 2 días'],
+            ['JB-0155', 'Obra Chacras', 'Playa 2', 'Vencido', 'Hace 3 días'],
+            ['JB-0261', 'Depósito Este', 'Playa 1', 'Para retirar', 'Hoy 07:58'],
+        ];
+
+        const estadoBadge = e => {
+            if (e === 'Disponible') return '<span class="badge ok">Disponible</span>';
+            if (e === 'Alquilado') return '<span class="badge neutral">Alquilado</span>';
+            if (e === 'Para retirar') return '<span class="badge warn">Para retirar</span>';
+            return '<span class="badge danger">Vencido</span>';
+        };
+
+        function renderContenedores(filter) {
+            const table = document.getElementById('cont-table');
+            table.innerHTML = '<tr><th>Contenedor</th><th>Cliente</th><th>Ubicación</th><th>Estado</th><th>Últ. movimiento</th></tr>';
+            contenedores.filter(c => filter === 'todos' || c[3] === filter).forEach(c => {
+                table.innerHTML += `<tr><td class="mono">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${estadoBadge(c[3])}</td><td>${c[4]}</td></tr>`;
+            });
+        }
+        renderContenedores('todos');
+        document.querySelectorAll('#cont-filters button').forEach(b => {
+            b.addEventListener('click', () => {
+                document.querySelectorAll('#cont-filters button').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                renderContenedores(b.dataset.f);
+            });
+        });
+
+        const cobros = [
+            ['Obra Chacras', 'JB-0231', 'USD 420', '15 jul 2026', 'al día', 'ok'],
+            ['Constructora Sur', 'JB-0198', 'USD 610', '28 jun 2026', 'vencido', 'danger'],
+            ['Depósito Este', 'JB-0212', 'USD 380', '12 jul 2026', 'por vencer', 'warn'],
+            ['Edificio Palmares', 'JB-0187', 'USD 350', '01 jul 2026', 'al día', 'ok'],
+            ['Obra Guaymallén', 'JB-0244', 'USD 400', '20 jul 2026', 'al día', 'ok'],
+            ['Cliente Maipú', 'JB-0176', 'USD 300', '05 jul 2026', 'por vencer', 'warn'],
+        ];
+        const cobrosTable = document.getElementById('cobros-table');
+        cobros.forEach(c => {
+            const label = c[4].charAt(0).toUpperCase() + c[4].slice(1);
+            cobrosTable.innerHTML += `<tr><td>${c[0]}</td><td class="mono">${c[1]}</td><td class="mono">${c[2]}</td><td>${c[3]}</td><td><span class="badge ${c[5]}">${label}</span></td></tr>`;
+        });
+
+        const alertas = [
+            ['warn', '⏱', 'JB-0261 · retiro solicitado', 'Recién ingresado por el chatbot de WhatsApp', 'hace 5 min'],
+            ['danger', '!', 'JB-0198 · alquiler vencido', 'Sin pago registrado desde el 28 de junio', 'hace 2 h'],
+            ['warn', '⏱', 'JB-0212 · vence en 2 días', 'Recordatorio automático enviado al cliente', 'hace 3 h'],
+            ['ok', '✓', 'JB-0187 · pago recibido', 'Registrado por el operador', 'ayer'],
+        ];
+        function renderAlertas(target) {
+            const el = document.getElementById(target);
+            el.innerHTML = '';
+            alertas.forEach(a => {
+                el.innerHTML += `<div class="alert-row">
+        <div class="alert-icon ${a[0]}">${a[1]}</div>
+        <div class="alert-text"><p class="t">${a[2]}</p><p class="s">${a[3]}</p></div>
+        <div class="alert-time">${a[4]}</div>
+      </div>`;
+            });
+        }
+        renderAlertas('dash-alerts');
+        renderAlertas('alertas-full');
+
+        const meses12 = [
+            ['Ago', '3120'], ['Sep', '3480'], ['Oct', '4010'], ['Nov', '5240'], ['Dic', '3900'], ['Ene', '2980'],
+            ['Feb', '3350'], ['Mar', '3720'], ['Abr', '3990'], ['May', '4210'], ['Jun', '4570'], ['Jul', '4860']
+        ];
+        function renderChart(target, data) {
+            const el = document.getElementById(target);
+            const max = Math.max(...data.map(d => parseInt(d[1])));
+            el.innerHTML = '';
+            data.forEach(d => {
+                const h = Math.round((parseInt(d[1]) / max) * 100);
+                el.innerHTML += `<div class="bar-col">
+        <span class="m-value">${d[1]}</span>
+        <div class="bar" style="height:${h}%;"></div>
+        <span class="m-label">${d[0]}</span>
+      </div>`;
+            });
+        }
+        renderChart('mini-chart', meses12.slice(-6));
+        renderChart('full-chart', meses12);
+
+        const chatMsgs = [
+            ['in', 'Hola, necesito retirar un contenedor de la obra en Chacras'],
+            ['out', 'Perfecto. ¿Me pasás el número de contenedor o la dirección de retiro?'],
+            ['in', 'Contenedor JB-0231, Ruta 60 km 5'],
+            ['out', 'Retiro registrado para JB-0231. Un operador coordina el horario y te confirma por acá.'],
+            ['in', '¿Cuánto tengo pendiente de pago?'],
+            ['out', 'Tenés USD 420 pendientes con vencimiento el 15 de julio. ¿Querés que te pase el alias para transferir?']
+        ];
+        const thread = document.getElementById('chat-thread');
+        chatMsgs.forEach(m => {
+            const isOut = m[0] === 'out';
+            thread.innerHTML += `<div style="align-self:${isOut ? 'flex-start' : 'flex-end'}; max-width:85%; font-size:13.5px; padding:8px 12px; border-radius:${isOut ? '12px 12px 12px 2px' : '12px 12px 2px 12px'}; background:${isOut ? '#F1EFE8' : 'var(--accent-light)'}; color:${isOut ? 'var(--text-dark)' : '#8A4A1F'};">${m[1]}</div>`;
+        });
+    </script>
+</body>
+
+</html>
